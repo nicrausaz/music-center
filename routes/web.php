@@ -8,6 +8,7 @@ Route::get('/', function () {
 });
 
 Route::get('/artists', 'ArtistsController@getAll');
+Route::get('/artist/{name}', 'ArtistsController@getOne');
 
 Route::get('/albums', function () {
     return view('albums');

@@ -18,7 +18,7 @@ class ArtistsController extends Controller {
     }
 
     public function getAll () {
-        $items = array_diff(scandir($this->musicPath), array('.', '..'));;
+        $items = array_diff(scandir($this->musicPath), array('.', '..'));
 
         foreach ($items as $item) {
             if (is_dir($this->musicPath . $item)) {
@@ -28,17 +28,36 @@ class ArtistsController extends Controller {
 
         $selected_page = LengthAwarePaginator::resolveCurrentPage();
         $perPage = 30;
-        $current_page_items = array_slice($items, $perPage * ($selected_page - 1), $perPage);
+        $current_page_items = array_slice($this->artists, $perPage * ($selected_page - 1), $perPage);
 
 
-        $paginated_artists = new LengthAwarePaginator($current_page_items, count($items), $perPage, $selected_page);
+        $paginated_artists = new LengthAwarePaginator($current_page_items, count($this->artists), $perPage, $selected_page);
 
         $paginated_artists->withPath('artists');
 
         return view('artists', ['artists' => $paginated_artists]);
     }
 
-    private function getOne () {
+    public function getOne ($name) {
 
+        $artist_path = $this->musicPath . $name;
+        $artist_content = array_diff(scandir($artist_path), array('.', '..'));
+
+        $artist_albums = [];
+        $artist_singles = [];
+
+        foreach ($artist_content as $item) {
+            if (is_dir($artist_path . "\\" . $item)) {
+                array_push($artist_albums, $item);
+            } else {
+                array_push($artist_singles, $item);
+            }
+        }
+
+        return view('artist', ['artist_data' => [
+            'name' => $name,
+            'albums' => $artist_albums,
+            'singles' => $artist_singles
+        ]]);
     }
 }
