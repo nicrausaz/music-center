@@ -39,7 +39,6 @@ class ArtistsController extends Controller {
     }
 
     public function getOne ($name) {
-
         $artist_path = $this->musicPath . $name;
         $artist_content = array_diff(scandir($artist_path), array('.', '..'));
 
@@ -47,17 +46,47 @@ class ArtistsController extends Controller {
         $artist_singles = [];
 
         foreach ($artist_content as $item) {
-            if (is_dir($artist_path . "\\" . $item)) {
-                array_push($artist_albums, $item);
+            $item_path = $artist_path . "\\" . $item;
+            if (is_dir($item_path)) {
+
+                $album = [
+                    "name" => $item,
+                    "numberOfSongs" => $this->getNumberOfSongs($item_path)
+                ];
+
+                array_push($artist_albums, $album);
             } else {
+                // echo is_file($item_path);
+                // get id3
+                // echo "<pre>";
+                // access problem ??
+                // $getId3 = new \GetId3_GetId3();
+                // $audio = $getId3
+                // // // ->setOptionMD5Data(true)
+                // // // ->setOptionMD5DataSource(true)
+                // // // ->setEncoding('UTF-8')
+                // ->analyze($item_path);
+
+                // print_r($audio);
                 array_push($artist_singles, $item);
             }
         }
+
+        // get artist pic
+        $getdata = file_get_contents('https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist='.$name.'&api_key=87ac8dfa5f93287d9b69650bea9722af&format=json');
+
+        print_r($getdata);
+        // echo " <pre>";
 
         return view('artist', ['artist_data' => [
             'name' => $name,
             'albums' => $artist_albums,
             'singles' => $artist_singles
         ]]);
+    }
+
+    private function getNumberOfSongs($album)
+    {
+        return count(array_diff(scandir($album), array('.', '..')));
     }
 }

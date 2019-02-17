@@ -40,7 +40,7 @@
             <div class="media-right">
                 {{-- <button class="delete"></button> --}}
             </div>
-            </article>
+        </article>
     @endforeach
     {{$artists->links()}}
 </div>

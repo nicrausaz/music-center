@@ -7,28 +7,30 @@
     <div class="notification">
         <h2 class="subtitle">Albums</h1>
     </div>
-    <table class="table">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Songs #</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-
-            </tr>
-        </tbody>
-    </table>
+    @if(count($artist_data['albums']) > 0)
+    @foreach ($artist_data['albums'] as $album)
+        
+    <article class="media">
+        <figure class="media-left">
+            <p class="image is-64x64">
+            <img src="https://bulma.io/images/placeholders/128x128.png">
+            </p>
+        </figure>
+        <div class="media-content">
+            <div class="content">
+                <p>
+                    <br>
+                    <strong><a href="/album/{{$album['name']}}">{{$album['name']}}</a></strong>
+                </p>
+            </div>
+        </div>
+    </article>
+    @endforeach
+    @endif
     <div class="notification">
         <h2 class="subtitle">Singles</h1>
     </div>
+    @if(count($artist_data['singles']) > 0)
     <table class="table">
         <thead>
         <tr>
@@ -60,6 +62,7 @@
         </tr>
         </tbody>
     </table>
+    @endif
 
 </div>
 @endsection

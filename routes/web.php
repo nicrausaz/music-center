@@ -10,6 +10,9 @@ Route::get('/', function () {
 Route::get('/artists', 'ArtistsController@getAll');
 Route::get('/artist/{name}', 'ArtistsController@getOne');
 
+Route::get('/new', 'ItemsController@add');
+
+
 Route::get('/albums', function () {
     return view('albums');
 });
